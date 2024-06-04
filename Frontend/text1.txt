@@ -1,1 +1,1 @@
-hi frontend
+hi frontend for the project
