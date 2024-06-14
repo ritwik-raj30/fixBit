@@ -23,10 +23,16 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  avatarImage: {
+  ProfileImage: {
     type: String,
     default: "",
   },
+
+  gender:{
+    type:String,
+    enum:["male", "female"],
+    required:true
+},
 });
 
 module.exports = mongoose.model("Users", userSchema);
