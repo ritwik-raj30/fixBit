@@ -4,21 +4,22 @@ import Logo from "../assets/logo.svg";
 import styled from "styled-components";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';  // Corrected import
+import axios from 'axios';
 import { registerRoute } from "../utils/APIroutes";
 
 const Register = () => {
-  const navigate = useNavigate();  // Initialize useNavigate
+  const navigate = useNavigate();
 
   const [values, setValues] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
+    gender: "", // Added gender field
   });
 
   const handleValidation = () => {
-    const { password, confirmPassword, username, email } = values;
+    const { password, confirmPassword, username, email, gender } = values;
     if (password !== confirmPassword) {
       toast.error("Password and confirm password should be the same.", {
         position: "bottom-right",
@@ -63,6 +64,17 @@ const Register = () => {
         progress: undefined,
       });
       return false;
+    } else if (gender === "") {
+      toast.error("Gender is required.", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
     }
     return true;
   };
@@ -70,16 +82,16 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { email, username, password } = values;
+      const { email, username, password, gender } = values;
       try {
         const { data } = await axios.post(registerRoute, {
           username,
           email,
           password,
+          gender,
         });
 
         if (data.status === false) {
-          console.log("hehehehe")
           toast.error(data.msg, {
             position: "bottom-right",
             autoClose: 5000,
@@ -95,7 +107,7 @@ const Register = () => {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
           );
-          navigate("/");  // Navigate to the home page
+          navigate("/");
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.", {
@@ -147,6 +159,11 @@ const Register = () => {
             name="confirmPassword"
             onChange={(e) => handleChange(e)}
           />
+          <select name="gender" onChange={(e) => handleChange(e)} value={values.gender}>
+            <option value="" disabled>Select your gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
           <button type="submit">Create User</button>
           <span>
             Already have an account? <Link to="/login">Login.</Link>
@@ -189,7 +206,20 @@ const FormContainer = styled.div`
     border-radius: 2rem;
     padding: 3rem 5rem;
   }
-  input {
+select {
+    background-color: white;
+    padding: 1rem;
+    border: 0.1rem solid #4e0eff;
+    border-radius: 0.4rem;
+    color: Balack;
+    width: 100%;
+    font-size: 1rem;
+    &:focus {
+      border: 0.1rem solid #997af0;
+      outline: none;
+    }
+  }
+      input {
     background-color: transparent;
     padding: 1rem;
     border: 0.1rem solid #4e0eff;
