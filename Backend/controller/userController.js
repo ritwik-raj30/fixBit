@@ -1,6 +1,6 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
-
+const mongoose = require('mongoose'); // Import mongoose
 module.exports.login = async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -46,10 +46,16 @@ module.exports.register = async (req, res, next) => {
 
 module.exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await User.find({ _id: { $ne: req.params.id } }).select([
+    const userId = req.params.id.trim(); // Trim the ID to remove any extraneous whitespace or newline characters
+
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ error: "Invalid user ID format" });
+    }
+
+    const users = await User.find({ _id: { $ne: userId } }).select([
       "email",
       "username",
-      "avatarImage",
+      "ProfileImage",
       "_id",
     ]);
     return res.json(users);

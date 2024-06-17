@@ -107,7 +107,7 @@ const Register = () => {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
           );
-          navigate("/");
+          navigate("/chat");
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.", {
