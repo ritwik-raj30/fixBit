@@ -73,7 +73,7 @@ const Login = () => {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
           );
-          navigate("/");  // Navigate to the home page
+          navigate("/chat");  // Navigate to the home page
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.", {
