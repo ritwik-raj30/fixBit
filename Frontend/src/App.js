@@ -10,14 +10,18 @@ import Chat from './pages/chat';
 
 function App() {
   return (
-    <BrowserRouter>
+    
+      <BrowserRouter>
       <Routes>
+        <Route path="/" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat/>} />
 
       </Routes>
     </BrowserRouter>
+
+    
   
   );
 }

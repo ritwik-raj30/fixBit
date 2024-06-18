@@ -1,11 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import Logout from "./Logout";
+import ChatInput from "./ChatInput";
+import Messages from "./Messages";
+import axios from "axios";
+import { sendMessageRoute } from "../utils/APIroutes";
 
-export default function ChatContainer({ currentChat }) {
+export default function ChatContainer({ currentChat,currentUser }) {
   if (!currentChat) {
     return <Container>No chat selected</Container>;
   }
+
+  const handleSendMsg= async(msg) => {
+    try {
+      const response = await axios.post(sendMessageRoute, {
+        from: currentUser._id,
+        to: currentChat._id,
+        message: msg,
+      });
+      console.log('Message sent : ',response.data);
+    } catch (error) {
+      console.error('Error sending message:', error.response ? error.response.data : error.message);
+    }
+  
+  };
 
   return (
     <Container>
@@ -20,10 +38,8 @@ export default function ChatContainer({ currentChat }) {
         </div>
         <Logout/>
       </div>
-      <div className="chat-messages"></div>
-      <div className="chat-input">
-       
-      </div>
+      <Messages />
+      <ChatInput handleSendMsg={handleSendMsg}/> 
       
            </Container>
   );
