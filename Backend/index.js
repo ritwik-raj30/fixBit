@@ -10,6 +10,8 @@ const connectToMongoDB = require("./db/dbConnect");
 require("dotenv").config();
 const PORT = process.env.PORT || 5500;
 const app = express();
+const socket =require("socket.io");
+
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,9 +22,38 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/message",messageRoutes);
 
+// Connect to MongoDB and start the server
 connectToMongoDB().then(() => {
-  app.listen(PORT, () => {
+  const server = app.listen(PORT, () => {
     console.log("Server is running on port " + PORT);
+    
+    // Initialize Socket.IO server here
+    const io = socket(server, {
+      cors: {
+        origin: "http://localhost:3000",
+        credentials: true,
+      },
+    });
+
+    global.onlineUsers = new Map();
+
+    io.on("connection", (socket) => {
+      global.chatSocket = socket;
+      socket.on("add-user", (userId) => {
+        onlineUsers.set(userId, socket.id);
+      });
+
+      socket.on("send-msg", (data) => {
+        const sendUserSocket = onlineUsers.get(data.to);
+        if (sendUserSocket) {
+          socket.to(sendUserSocket).emit("msg-recieve", data.message);
+        }
+      });
+    });
   });
+}).catch(err => {
+  console.error("Failed to connect to MongoDB", err);
 });
+
