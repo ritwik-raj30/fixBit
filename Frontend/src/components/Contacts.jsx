@@ -6,6 +6,7 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (currentUser) {
@@ -19,16 +20,32 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
     setCurrentChat(contact);
   };
 
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredContacts = contacts.filter((contact) =>
+    contact.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <>
       {currentUserImage && currentUserName && (
         <Container>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h3>Hostel Buddy</h3>
+            <h3>Fix-BIT</h3>
+          </div>
+          <div className="search">
+            <input
+              type="text"
+              placeholder="Search Contacts"
+              value={searchQuery}
+              onChange={handleSearch}
+            />
           </div>
           <div className="contacts">
-            {contacts.map((contact, index) => {
+            {filteredContacts.map((contact, index) => {
               return (
                 <div
                   key={contact._id}
@@ -60,9 +77,10 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
     </>
   );
 }
+
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 75% 15%;
+  grid-template-rows: 10% 10% 65% 15%;
   overflow: hidden;
   background-color: #080420;
 
@@ -77,6 +95,21 @@ const Container = styled.div`
     h3 {
       color: white;
       text-transform: uppercase;
+    }
+  }
+
+  .search {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      border: none;
+      outline: none;
     }
   }
 
@@ -116,12 +149,11 @@ const Container = styled.div`
       .username {
         h3 {
           font-size: 1rem;
-           color: white;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-                max-width: 400px;
-       
+          color: white;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          max-width: 400px;
         }
       }
     }
@@ -165,6 +197,7 @@ const Container = styled.div`
       }
     }
   }
+
   /* Media queries for responsive font size */
   @media screen and (max-width: 720px) {
     .contacts .contact .username h3 {
