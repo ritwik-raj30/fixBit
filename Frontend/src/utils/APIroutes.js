@@ -7,3 +7,6 @@ export const sendMessageRoute = `${host}/api/message/addmsg`;
 export const recieveMessageRoute = `${host}/api/message/getmsg`;
 export const setAvatarRoute = `${host}/api/auth/setavatar`;
 
+
+export const createComplaintRoute = `${host}/api/complain/submit`;
+export const getComplaintsRoute = `${host}/api/complain/all`;

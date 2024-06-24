@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 //file import
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/message");
+const complainRoutes= require("./routes/submit")
 const connectToMongoDB = require("./db/dbConnect");
 
 require("dotenv").config();
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/message",messageRoutes);
+app.use("/api/complain",complainRoutes);
 
 // Connect to MongoDB and start the server
 connectToMongoDB().then(() => {
