@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import styled from "styled-components";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';  // Corrected import
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios"; // Corrected import
 import { loginRoute } from "../utils/APIroutes";
 
 const Login = () => {
-  const navigate = useNavigate();  // Initialize useNavigate
+  const navigate = useNavigate(); // Initialize useNavigate
 
+  const [isadmin, setisadmin] = useState(false);
   const [values, setValues] = useState({
     username: "",
     password: "",
-  
+    role: "student",
+    secertkey: "",
   });
 
   const handleValidation = () => {
-    const { password,username } = values;
-    if (password== "") {
+    const { password, username, role, secertkey } = values;
+    if (password == "") {
       toast.error("Enter the complete password.", {
         position: "bottom-right",
         autoClose: 5000,
@@ -29,7 +31,7 @@ const Login = () => {
         progress: undefined,
       });
       return false;
-    } else if (username==="") {
+    } else if (username === "") {
       toast.error("Enter the user name ", {
         position: "bottom-right",
         autoClose: 5000,
@@ -41,23 +43,36 @@ const Login = () => {
       });
       return false;
     }
-      
-    
-    return true;}
-  
+    if (role === "admin" && secertkey === "") {
+      toast.error("Enter the secert key to login as admin", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    }
+
+    return true;
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const {  username, password } = values;
+      const { username, password, role, secertkey } = values;
       try {
         const { data } = await axios.post(loginRoute, {
           username,
           password,
+          role,
+          secertkey,
         });
 
         if (data.status === false) {
-          console.log("hehehehe")
+          console.log("hehehehe");
           toast.error(data.msg, {
             position: "bottom-right",
             autoClose: 5000,
@@ -73,7 +88,7 @@ const Login = () => {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
           );
-          navigate("/chat");  // Navigate to the home page
+          navigate("/chat"); // Navigate to the home page
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.", {
@@ -92,6 +107,9 @@ const Login = () => {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
+  useEffect(() => {
+    setisadmin(values.role === "admin");
+  }, [values.role]);
 
   return (
     <>
@@ -113,10 +131,29 @@ const Login = () => {
             name="password"
             onChange={(e) => handleChange(e)}
           />
-      
+          {isadmin && (
+            <input
+              type="text"
+              placeholder="secertkey"
+              name="secertkey"
+              onChange={(e) => handleChange(e)}
+            />
+          )}
+          <select
+            name="role"
+            onChange={(e) => handleChange(e)}
+            value={values.role}
+          >
+            <option value="" disabled>
+              Select your role
+            </option>
+            <option value="student">Student</option>
+            <option value="admin">admin</option>
+          </select>
+
           <button type="submit">Login User</button>
           <span>
-            DO not  have an account? <Link to="/register">Register.</Link>
+            DO not have an account? <Link to="/register">Register.</Link>
           </span>
         </form>
       </FormContainer>
@@ -155,6 +192,19 @@ const FormContainer = styled.div`
     background-color: #00000076;
     border-radius: 2rem;
     padding: 3rem 5rem;
+  }
+  select {
+    background-color: white;
+    padding: 1rem;
+    border: 0.1rem solid #4e0eff;
+    border-radius: 0.4rem;
+    color: Balack;
+    width: 100%;
+    font-size: 1rem;
+    &:focus {
+      border: 0.1rem solid #997af0;
+      outline: none;
+    }
   }
   input {
     background-color: transparent;

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
-import { getComplaintsRoute } from '../utils/APIroutes';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import { getComplaintsRoute } from "../utils/APIroutes";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const GetComplaint = () => {
   const [complaints, setComplaints] = useState([]);
@@ -14,7 +14,10 @@ const GetComplaint = () => {
         const response = await axios.get(getComplaintsRoute);
         setComplaints(response.data);
       } catch (error) {
-        toast.error("Error fetching complaints. Please try again.", { position: "bottom-right", autoClose: 5000 });
+        toast.error("Error fetching complaints. Please try again.", {
+          position: "bottom-right",
+          autoClose: 5000,
+        });
       }
     };
 
@@ -27,10 +30,16 @@ const GetComplaint = () => {
       <div className="complaints-list">
         {complaints.map((complaint) => (
           <div className="complaint" key={complaint._id}>
-            <h2>{complaint.username}</h2>
-            <p>Roll Number: {complaint.rollNumber}</p>
-            <p>{complaint.complaint}</p>
-            {complaint.imageUrl && <img src={complaint.imageUrl} alt="Complaint Attachment" />}
+            <div className="detail">
+              <h2>{complaint.username}</h2>
+              <p>Roll Number: {complaint.rollNumber}</p>
+              <p>Issue: {complaint.complaint}</p>
+            </div>
+            <div className="image">
+              {complaint.imageUrl && (
+                <img src={complaint.imageUrl} alt="Complaint Attachment" />
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -45,7 +54,7 @@ const ComplaintsContainer = styled.div`
   min-height: 100vh;
   color: black;
   overflow-y: auto; /* Add scroll bar */
-  
+
   h1 {
     text-align: center;
     margin-bottom: 2rem;
@@ -61,13 +70,18 @@ const ComplaintsContainer = styled.div`
   }
 
   .complaint {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    justify-content: space-between;
     background-color: white;
     padding: 1rem;
     border-radius: 0.5rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
 
     img {
-      max-width: 100%;
+      max-width: 500px;
       height: auto;
       margin-top: 1rem;
       border-radius: 0.5rem;

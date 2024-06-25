@@ -1,19 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { useState, useEffect,useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
 import ChatContainer from "../components/ChatContainer";
-import { allUsersRoute,host } from "../utils/APIroutes";
-import {io} from "socket.io-client";
-
-
+import { allUsersRoute, host, alladminRoute } from "../utils/APIroutes";
+import { io } from "socket.io-client";
 
 const Chat = () => {
-  const socket =useRef();
+  const socket = useRef();
   const navigate = useNavigate();
   const [contacts, setContacts] = useState([]);
   const [currentChat, setCurrentChat] = useState(undefined);
@@ -32,19 +30,32 @@ const Chat = () => {
     }
   }, [navigate]);
 
-  useEffect(()=>{
-    if(currentUser){
-      socket.current =io(host);
-      socket.current.emit("add-user",currentUser._id);
-
+  useEffect(() => {
+    if (currentUser) {
+      socket.current = io(host);
+      socket.current.emit("add-user", currentUser._id);
     }
-  },[currentUser]);
+  }, [currentUser]);
 
   useEffect(() => {
     const fetchUsers = async () => {
-      if (currentUser) {
+      if (currentUser && !currentUser.isadmin) {
         try {
-          const response = await axios.get(`${allUsersRoute}/${currentUser._id}`);
+          // const response = await axios.get(
+          //   `${allUsersRoute}/${currentUser._id}`
+          // );
+          const response = await axios.get(
+            `${alladminRoute}/${currentUser._id}`
+          );
+          setContacts(response.data);
+        } catch (error) {
+          console.error("Error fetching users:", error);
+        }
+      } else if (currentUser && currentUser.isadmin) {
+        try {
+          const response = await axios.get(
+            `${allUsersRoute}/${currentUser._id}`
+          );
           setContacts(response.data);
         } catch (error) {
           console.error("Error fetching users:", error);
@@ -59,11 +70,20 @@ const Chat = () => {
     <>
       <Container>
         <div className="container">
-          <Contacts contacts={contacts} currentUser={currentUser} setCurrentChat={setCurrentChat} />
+          <Contacts
+            contacts={contacts}
+            currentUser={currentUser}
+            setCurrentChat={setCurrentChat}
+          />
+
           {isLoaded && currentChat === undefined ? (
             <Welcome />
           ) : (
-            <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} />
+            <ChatContainer
+              currentChat={currentChat}
+              currentUser={currentUser}
+              socket={socket}
+            />
           )}
         </div>
       </Container>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "../assets/logo.svg";
 
@@ -7,6 +8,7 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
@@ -22,6 +24,12 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
 
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
+  };
+  const complainHandle = () => {
+    navigate("/complains");
+  };
+  const submitHandle = () => {
+    navigate("/submit");
   };
 
   const filteredContacts = contacts.filter((contact) =>
@@ -64,12 +72,24 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
               );
             })}
           </div>
-          <div className="current-user">
-            <div className="avatar">
-              <img src={currentUserImage} alt="avatar" />
-            </div>
-            <div className="username">
-              <h2>{currentUserName}</h2>
+          <div>
+            {currentUser.isadmin && (
+              <button className="complain" onClick={complainHandle}>
+                camplain page
+              </button>
+            )}
+            {!currentUser.isadmin && (
+              <button className="Submit-complain" onClick={submitHandle}>
+                Submit camplain
+              </button>
+            )}
+            <div className="current-user">
+              <div className="avatar">
+                <img src={currentUserImage} alt="avatar" />
+              </div>
+              <div className="username">
+                <h2>{currentUserName}</h2>
+              </div>
             </div>
           </div>
         </Container>

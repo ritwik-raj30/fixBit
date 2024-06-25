@@ -27,12 +27,15 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-
-  gender:{
-    type:String,
-    enum:["male", "female"],
-    required:true
-},
+  gender: {
+    type: String,
+    enum: ["male", "female"],
+    required: true,
+  },
+  isadmin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("Users", userSchema);
