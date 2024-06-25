@@ -1,13 +1,19 @@
-const Complaint = require('../models/complainModel');
-const express = require('express');
+const Complaint = require("../models/complainModel");
+const express = require("express");
 const router = express.Router();
-const complaintController = require('../controller/userComplain');
+const complaintController = require("../controller/userComplain");
 
 // Create a new complaint
-router.post('/submit', complaintController.createComplaint);
+router.post("/submit", complaintController.createComplaint);
 
 // Get all complaints
-router.get('/all', complaintController.getComplaints);
+router.get("/all", complaintController.allgetComplaints);
+
+//get all complaints of a user
+router.get("/:id", complaintController.getComplaints);
+
+// Delete a complaint
+router.delete("/delete/:id", complaintController.deleteComplaint);
 module.exports = router;
 
 // Create a new complaint

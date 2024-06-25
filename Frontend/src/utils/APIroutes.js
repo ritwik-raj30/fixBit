@@ -18,4 +18,6 @@ export const adminRegisterRoute = `${host}/api/admin/register`;
 
 //complaint routes
 export const createComplaintRoute = `${host}/api/complain/submit`;
-export const getComplaintsRoute = `${host}/api/complain/all`;
+export const allgetComplaintRoute = `${host}/api/complain/all`;
+export const getComplaintsRoute = `${host}/api/complain/`;
+export const deleteComplaintRoute = `${host}/api/complain/delete`;

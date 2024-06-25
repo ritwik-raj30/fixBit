@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
-import {createComplaintRoute} from '../utils/APIroutes'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { createComplaintRoute } from "../utils/APIroutes";
 
-const cloudinaryUploadUrl = 'https://api.cloudinary.com/v1_1/dqzavvk0u/image/upload';
-const cloudinaryUploadPreset = 'fixbit';
+const cloudinaryUploadUrl =
+  "https://api.cloudinary.com/v1_1/dqzavvk0u/image/upload";
+const cloudinaryUploadPreset = "fixbit";
 
 const SubmitComplaint = () => {
   const navigate = useNavigate();
@@ -21,13 +22,22 @@ const SubmitComplaint = () => {
   const handleValidation = () => {
     const { username, rollNumber, complaint } = values;
     if (username.length < 3) {
-      toast.error("Username should be greater than 3 characters.", { position: "bottom-right", autoClose: 5000 });
+      toast.error("Username should be greater than 3 characters.", {
+        position: "bottom-right",
+        autoClose: 5000,
+      });
       return false;
     } else if (rollNumber === "") {
-      toast.error("Roll number is required.", { position: "bottom-right", autoClose: 5000 });
+      toast.error("Roll number is required.", {
+        position: "bottom-right",
+        autoClose: 5000,
+      });
       return false;
     } else if (complaint === "") {
-      toast.error("Complaint is required.", { position: "bottom-right", autoClose: 5000 });
+      toast.error("Complaint is required.", {
+        position: "bottom-right",
+        autoClose: 5000,
+      });
       return false;
     }
     return true;
@@ -40,16 +50,22 @@ const SubmitComplaint = () => {
         let imageUrl = null;
         if (values.image) {
           const formData = new FormData();
-          formData.append('file', values.image);
-          formData.append('upload_preset', cloudinaryUploadPreset);
+          formData.append("file", values.image);
+          formData.append("upload_preset", cloudinaryUploadPreset);
 
-          const cloudinaryResponse = await axios.post(cloudinaryUploadUrl, formData);
+          const cloudinaryResponse = await axios.post(
+            cloudinaryUploadUrl,
+            formData
+          );
           imageUrl = cloudinaryResponse.data.secure_url;
         }
 
         const complaintData = {
           username: values.username,
           rollNumber: values.rollNumber,
+          from: JSON.parse(
+            localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+          )._id,
           complaint: values.complaint,
           imageUrl,
         };
@@ -57,14 +73,23 @@ const SubmitComplaint = () => {
         const response = await axios.post(createComplaintRoute, complaintData);
 
         if (response.data.status === false) {
-          toast.error(response.data.msg, { position: "bottom-right", autoClose: 5000 });
+          toast.error(response.data.msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+          });
         }
         if (response.data.status === true) {
-          toast.success("Complaint submitted successfully!", { position: "bottom-right", autoClose: 5000 });
+          toast.success("Complaint submitted successfully!", {
+            position: "bottom-right",
+            autoClose: 5000,
+          });
           navigate("/complains");
         }
       } catch (error) {
-        toast.error("An error occurred. Please try again.", { position: "bottom-right", autoClose: 5000 });
+        toast.error("An error occurred. Please try again.", {
+          position: "bottom-right",
+          autoClose: 5000,
+        });
       }
     }
   };
@@ -85,10 +110,29 @@ const SubmitComplaint = () => {
           <div className="brand">
             <h1>Submit Complaint</h1>
           </div>
-          <input type="text" placeholder="Username" name="username" onChange={(e) => handleChange(e)} />
-          <input type="text" placeholder="Roll Number" name="rollNumber" onChange={(e) => handleChange(e)} />
-          <textarea placeholder="Your Complaint" name="complaint" onChange={(e) => handleChange(e)}></textarea>
-          <input type="file" name="image" accept="image/*" onChange={(e) => handleChange(e)} />
+          <input
+            type="text"
+            placeholder="Username"
+            name="username"
+            onChange={(e) => handleChange(e)}
+          />
+          <input
+            type="text"
+            placeholder="Roll Number"
+            name="rollNumber"
+            onChange={(e) => handleChange(e)}
+          />
+          <textarea
+            placeholder="Your Complaint"
+            name="complaint"
+            onChange={(e) => handleChange(e)}
+          ></textarea>
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={(e) => handleChange(e)}
+          />
           <button type="submit">Submit Complaint</button>
         </form>
       </FormContainer>
@@ -123,7 +167,8 @@ const FormContainer = styled.div`
     border-radius: 2rem;
     padding: 3rem 5rem;
   }
-  input, textarea {
+  input,
+  textarea {
     background-color: transparent;
     padding: 1rem;
     border: 0.1rem solid #4e0eff;

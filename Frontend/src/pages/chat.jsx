@@ -41,9 +41,6 @@ const Chat = () => {
     const fetchUsers = async () => {
       if (currentUser && !currentUser.isadmin) {
         try {
-          // const response = await axios.get(
-          //   `${allUsersRoute}/${currentUser._id}`
-          // );
           const response = await axios.get(
             `${alladminRoute}/${currentUser._id}`
           );
