@@ -3,9 +3,10 @@ const Complaint = require("../models/complainModel");
 // Create a new complaint
 exports.createComplaint = async (req, res) => {
   try {
-    const { username, rollNumber, from, complaint, imageUrl } = req.body;
+    const { username,  roomNumber,rollNumber, from, complaint, imageUrl } = req.body;
     const newComplaint = new Complaint({
       username,
+      roomNumber,
       rollNumber,
       from,
       complaint,

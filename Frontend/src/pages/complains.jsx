@@ -5,7 +5,6 @@ import { allgetComplaintRoute, getComplaintsRoute } from "../utils/APIroutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteComplaintRoute } from "../utils/APIroutes";
-// import { use } from "../../../Backend/routes/submit";
 
 const GetComplaint = () => {
   const [allcomplaints, setallComplaints] = useState([]);
@@ -26,7 +25,8 @@ const GetComplaint = () => {
     };
 
     fetchallComplaints();
-  }, [complaints, allcomplaints]);
+  }, []);
+
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
@@ -48,6 +48,7 @@ const GetComplaint = () => {
 
     fetchComplaints();
   }, []);
+
   useEffect(() => {
     const data = JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
@@ -56,6 +57,7 @@ const GetComplaint = () => {
       setisadmin(true);
     }
   }, []);
+
   // const deletecomplain = async (id) => {
   //   try {
   //     await axios.delete(`${deleteComplaintRoute}/${id}`);
@@ -85,6 +87,7 @@ const GetComplaint = () => {
               <div className="detail">
                 <h2>{allcomplaint.username}</h2>
                 <p>Roll Number: {allcomplaint.rollNumber}</p>
+                <p>Room Number: {allcomplaint.roomNumber}</p> {/* Added Room Number */}
                 <p>Issue: {allcomplaint.complaint}</p>
 
                 {/* <button onClick={deletecomplain(allcomplaint._id)}>
@@ -104,6 +107,7 @@ const GetComplaint = () => {
               <div className="detail">
                 <h2>{complaint.username}</h2>
                 <p>Roll Number: {complaint.rollNumber}</p>
+                <p>Room Number: {complaint.roomNumber}</p> {/* Added Room Number */}
                 <p>Issue: {complaint.complaint}</p>
                 <hr />
                 {/* <button onClick={deletecomplain(complaint._id)}>Delete</button> */}

@@ -6,8 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { createComplaintRoute } from "../utils/APIroutes";
 
-const cloudinaryUploadUrl =
-  "https://api.cloudinary.com/v1_1/dqzavvk0u/image/upload";
+const cloudinaryUploadUrl = "https://api.cloudinary.com/v1_1/dqzavvk0u/image/upload";
 const cloudinaryUploadPreset = "fixbit";
 
 const SubmitComplaint = () => {
@@ -15,12 +14,13 @@ const SubmitComplaint = () => {
   const [values, setValues] = useState({
     username: "",
     rollNumber: "",
+    roomNumber: "",  // Added roomNumber to the form state
     complaint: "",
     image: null,
   });
 
   const handleValidation = () => {
-    const { username, rollNumber, complaint } = values;
+    const { username, rollNumber, roomNumber, complaint } = values;
     if (username.length < 3) {
       toast.error("Username should be greater than 3 characters.", {
         position: "bottom-right",
@@ -29,6 +29,12 @@ const SubmitComplaint = () => {
       return false;
     } else if (rollNumber === "") {
       toast.error("Roll number is required.", {
+        position: "bottom-right",
+        autoClose: 5000,
+      });
+      return false;
+    } else if (roomNumber === "") {
+      toast.error("Room number is required.", {
         position: "bottom-right",
         autoClose: 5000,
       });
@@ -53,16 +59,14 @@ const SubmitComplaint = () => {
           formData.append("file", values.image);
           formData.append("upload_preset", cloudinaryUploadPreset);
 
-          const cloudinaryResponse = await axios.post(
-            cloudinaryUploadUrl,
-            formData
-          );
+          const cloudinaryResponse = await axios.post(cloudinaryUploadUrl, formData);
           imageUrl = cloudinaryResponse.data.secure_url;
         }
 
         const complaintData = {
           username: values.username,
           rollNumber: values.rollNumber,
+          roomNumber: values.roomNumber, // Include roomNumber in the data sent to backend
           from: JSON.parse(
             localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
           )._id,
@@ -122,6 +126,12 @@ const SubmitComplaint = () => {
             name="rollNumber"
             onChange={(e) => handleChange(e)}
           />
+          <input
+            type="text"
+            placeholder="Room Number"  // Added input for room number
+            name="roomNumber"
+            onChange={(e) => handleChange(e)}
+          />
           <textarea
             placeholder="Your Complaint"
             name="complaint"
@@ -140,6 +150,7 @@ const SubmitComplaint = () => {
     </>
   );
 };
+
 const FormContainer = styled.div`
   height: 100vh;
   width: 100vw;
