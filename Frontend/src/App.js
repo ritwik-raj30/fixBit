@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-// Where you are importing Register
+import HomePage from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Chat from "./pages/chat";
@@ -9,13 +9,12 @@ import GetComplains from "./pages/complains";
 import AdminPage from "./pages/adminPage";
 import AdminLogin from "./pages/AdminLogin";
 import UserLogin from "./pages/UserLogin";
-import Home 
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Chat />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/register" element={<Register />} />

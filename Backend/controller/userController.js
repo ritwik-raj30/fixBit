@@ -113,12 +113,23 @@ module.exports.setAvatar = async (req, res, next) => {
   }
 };
 
+// userController.js
+
 module.exports.logOut = (req, res, next) => {
   try {
-    if (!req.params.id) return res.json({ msg: "User id is required " });
-    res.send("logged out	successfully");
-    return res.status(200).send();
+    const userId = req.params.id;
+    
+    if (!userId) {
+      return res.status(400).json({ msg: "User id is required" });
+    }
+
+    // Perform logout operations (e.g., clear sessions, tokens, etc.)
+    // Example: Clearing user session or token
+
+    // Send a success response
+    res.status(200).json({ msg: "Logged out successfully" });
   } catch (error) {
-    next(error);
+    next(error); // Pass any caught errors to Express error handling middleware
   }
 };
+

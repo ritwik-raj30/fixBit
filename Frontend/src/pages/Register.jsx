@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { registerRoute, adminRegisterRoute } from "../utils/APIroutes";
+import { registerRoute } from "../utils/APIroutes";
 import { useEffect } from "react";
 
 const Register = () => {
@@ -23,7 +23,7 @@ const Register = () => {
   });
 
   const handleValidation = () => {
-    const { password, confirmPassword, username, email, gender, role } = values;
+    const { password, confirmPassword, username, email, gender } = values;
     if (password !== confirmPassword) {
       toast.error("Password and confirm password should be the same.", {
         position: "bottom-right",
