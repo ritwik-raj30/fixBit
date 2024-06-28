@@ -26,7 +26,7 @@ const GetComplaint = () => {
     };
 
     fetchallComplaints();
-  }, [complaints, allcomplaints]);
+  }, [complaints]);
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
@@ -56,24 +56,24 @@ const GetComplaint = () => {
       setisadmin(true);
     }
   }, []);
-  // const deletecomplain = async (id) => {
-  //   try {
-  //     await axios.delete(`${deleteComplaintRoute}/${id}`);
-  //     toast.success("Complaint deleted successfully", {
-  //       position: "bottom-right",
-  //       autoClose: 5000,
-  //     });
-  //     setallComplaints(
-  //       allcomplaints.filter((complaint) => complaint._id !== id)
-  //     );
-  //     setComplaints(complaints.filter((complaint) => complaint._id !== id));
-  //   } catch (error) {
-  //     toast.error("Error deleting complaint. Please try again.", {
-  //       position: "bottom-right",
-  //       autoClose: 5000,
-  //     });
-  //   }
-  // };
+  const deletecomplain = async (id) => {
+    try {
+      await axios.delete(`${deleteComplaintRoute}/${id}`);
+      toast.success("Complaint deleted successfully", {
+        position: "bottom-right",
+        autoClose: 5000,
+      });
+      setallComplaints(
+        allcomplaints.filter((complaint) => complaint._id !== id)
+      );
+      setComplaints(complaints.filter((complaint) => complaint._id !== id));
+    } catch (error) {
+      toast.error("Error deleting complaint. Please try again.", {
+        position: "bottom-right",
+        autoClose: 5000,
+      });
+    }
+  };
 
   return (
     <ComplaintsContainer>
@@ -86,10 +86,9 @@ const GetComplaint = () => {
                 <h2>{allcomplaint.username}</h2>
                 <p>Roll Number: {allcomplaint.rollNumber}</p>
                 <p>Issue: {allcomplaint.complaint}</p>
-
-                {/* <button onClick={deletecomplain(allcomplaint._id)}>
+                <button onClick={() => deletecomplain(allcomplaint._id)}>
                   Delete
-                </button> */}
+                </button>
               </div>
               <div className="image">
                 {allcomplaint.imageUrl && (
@@ -106,7 +105,10 @@ const GetComplaint = () => {
                 <p>Roll Number: {complaint.rollNumber}</p>
                 <p>Issue: {complaint.complaint}</p>
                 <hr />
-                {/* <button onClick={deletecomplain(complaint._id)}>Delete</button> */}
+                <button onClick={() => deletecomplain(complaint._id)}>
+                  Delete
+                </button>
+                {/* <button>Delete</button> */}
               </div>
               <div className="image">
                 {complaint.imageUrl && (

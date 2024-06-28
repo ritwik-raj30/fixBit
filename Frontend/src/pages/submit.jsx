@@ -71,19 +71,17 @@ const SubmitComplaint = () => {
         };
 
         const response = await axios.post(createComplaintRoute, complaintData);
-
-        if (response.data.status === false) {
-          toast.error(response.data.msg, {
-            position: "bottom-right",
-            autoClose: 5000,
-          });
-        }
         if (response.data.status === true) {
           toast.success("Complaint submitted successfully!", {
             position: "bottom-right",
             autoClose: 5000,
           });
           navigate("/complains");
+        } else {
+          toast.error(response.data.msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+          });
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.", {
