@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Logout from "./Logout";
 import Fuse from "fuse.js"; // Import Fuse.js
 import Logo from "../assets/logo.svg";
 
@@ -82,23 +83,27 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
               );
             })}
           </div>
-          <div>
+          <div className="contrels">
             <button className="complain" onClick={complainHandle}>
               {`${currentUser.isadmin ? `All ` : `Your`} complain`}
             </button>
 
             {!currentUser.isadmin && (
-              <button className="Submit-complain" onClick={submitHandle}>
+              <button
+                className="complain Submit-complain"
+                onClick={submitHandle}
+              >
                 Submit complain
               </button>
             )}
-            <div className="current-user">
-              <div className="avatar">
-                <img src={currentUserImage} alt="avatar" />
-              </div>
-              <div className="username">
-                <h2>{currentUserName}</h2>
-              </div>
+            <Logout />
+          </div>
+          <div className="current-user">
+            <div className="avatar">
+              <img src={currentUserImage} alt="avatar" />
+            </div>
+            <div className="username">
+              <h2>{currentUserName}</h2>
             </div>
           </div>
         </Container>
@@ -109,10 +114,26 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 65% 15%;
+  grid-template-rows: 10% 10% 63% 6% 11%;
   overflow: hidden;
   background-color: #080420;
-
+  .contrels {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    .complain {
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #ffffff34;
+      color: white;
+      cursor: pointer;
+      transition: 0.5s ease-in-out;
+    }
+  }
   .brand {
     display: flex;
     align-items: center;
