@@ -2,6 +2,7 @@ const Complaint = require("../models/complainModel");
 const express = require("express");
 const router = express.Router();
 const complaintController = require("../controller/userComplain");
+const updateComplaintStatus=require("../controller/userComplain")
 
 // Create a new complaint
 router.post("/submit", complaintController.createComplaint);
@@ -14,6 +15,7 @@ router.get("/:id", complaintController.getComplaints);
 
 // Delete a complaint
 router.delete("/delete/:id", complaintController.deleteComplaint);
+// router.patch("/complaints/status", updateComplaintStatus);
 module.exports = router;
 
 // Create a new complaint

@@ -83,9 +83,14 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
             })}
           </div>
           <div>
-            <button className="complain" onClick={complainHandle}>
+            {/* <button className="complain" onClick={complainHandle}>
               {`${currentUser.isadmin ? `All ` : `Your`} complain`}
-            </button>
+            </button> */}
+            {!currentUser.isadmin && (
+              <button className="complain" onClick={complainHandle}>
+                Your complain
+              </button>
+            )}
 
             {!currentUser.isadmin && (
               <button className="Submit-complain" onClick={submitHandle}>

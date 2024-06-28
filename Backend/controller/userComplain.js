@@ -23,6 +23,19 @@ exports.createComplaint = async (req, res) => {
   }
 };
 
+// exports.updateComplaintStatus = async (req, res) => {
+//   try {
+//     const { username, status } = req.body; // Assume username and status are provided in the body
+//     const updatedComplaint = await Complaint.findOneAndUpdate(
+//       { username },
+//       { status },
+//       { new: true }
+//     );
+//     res.status(200).json({ status: true, msg: "Complaint status updated successfully!", updatedComplaint });
+//   } catch (error) {
+//     res.status(500).json({ status: false, msg: "An error occurred. Please try again." });
+//   }
+// };
 // Get all complaints
 exports.allgetComplaints = async (req, res) => {
   try {
