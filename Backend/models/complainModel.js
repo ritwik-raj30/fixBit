@@ -8,6 +8,7 @@ const ComplaintSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    roomNumber: { type: String, required: true },
     rollNumber: { type: String, required: true },
     complaint: { type: String, required: true },
     imageUrl: { type: String },

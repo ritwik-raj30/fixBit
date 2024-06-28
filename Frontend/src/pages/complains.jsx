@@ -5,7 +5,6 @@ import { allgetComplaintRoute, getComplaintsRoute } from "../utils/APIroutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { deleteComplaintRoute } from "../utils/APIroutes";
-// import { use } from "../../../Backend/routes/submit";
 
 const GetComplaint = () => {
   const [allcomplaints, setallComplaints] = useState([]);
@@ -26,7 +25,12 @@ const GetComplaint = () => {
     };
 
     fetchallComplaints();
+<<<<<<< HEAD
   }, [complaints]);
+=======
+  }, []);
+
+>>>>>>> ab849b71b82f723a86448006ad15a7fdeb37d7a6
   useEffect(() => {
     const fetchComplaints = async () => {
       try {
@@ -48,6 +52,7 @@ const GetComplaint = () => {
 
     fetchComplaints();
   }, []);
+
   useEffect(() => {
     const data = JSON.parse(
       localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
@@ -56,6 +61,7 @@ const GetComplaint = () => {
       setisadmin(true);
     }
   }, []);
+<<<<<<< HEAD
   const deletecomplain = async (id) => {
     try {
       await axios.delete(`${deleteComplaintRoute}/${id}`);
@@ -74,6 +80,27 @@ const GetComplaint = () => {
       });
     }
   };
+=======
+
+  // const deletecomplain = async (id) => {
+  //   try {
+  //     await axios.delete(`${deleteComplaintRoute}/${id}`);
+  //     toast.success("Complaint deleted successfully", {
+  //       position: "bottom-right",
+  //       autoClose: 5000,
+  //     });
+  //     setallComplaints(
+  //       allcomplaints.filter((complaint) => complaint._id !== id)
+  //     );
+  //     setComplaints(complaints.filter((complaint) => complaint._id !== id));
+  //   } catch (error) {
+  //     toast.error("Error deleting complaint. Please try again.", {
+  //       position: "bottom-right",
+  //       autoClose: 5000,
+  //     });
+  //   }
+  // };
+>>>>>>> ab849b71b82f723a86448006ad15a7fdeb37d7a6
 
   return (
     <ComplaintsContainer>
@@ -85,6 +112,7 @@ const GetComplaint = () => {
               <div className="detail">
                 <h2>{allcomplaint.username}</h2>
                 <p>Roll Number: {allcomplaint.rollNumber}</p>
+                <p>Room Number: {allcomplaint.roomNumber}</p> {/* Added Room Number */}
                 <p>Issue: {allcomplaint.complaint}</p>
                 <button onClick={() => deletecomplain(allcomplaint._id)}>
                   Delete
@@ -103,6 +131,7 @@ const GetComplaint = () => {
               <div className="detail">
                 <h2>{complaint.username}</h2>
                 <p>Roll Number: {complaint.rollNumber}</p>
+                <p>Room Number: {complaint.roomNumber}</p> {/* Added Room Number */}
                 <p>Issue: {complaint.complaint}</p>
                 <hr />
                 <button onClick={() => deletecomplain(complaint._id)}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Fuse from "fuse.js"; // Import Fuse.js
 import Logo from "../assets/logo.svg";
 import Logout from "./Logout";
 export default function Contacts({ contacts, currentUser, setCurrentChat }) {
@@ -25,16 +26,25 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
   };
+
   const complainHandle = () => {
     navigate("/complains");
   };
+
   const submitHandle = () => {
     navigate("/submit");
   };
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Set up Fuse.js options
+  const fuse = new Fuse(contacts, {
+    keys: ["username"], // Specify the keys to search within
+    threshold: 0.3, // Set the threshold for matching (0.0 to 1.0)
+  });
+
+  // Perform fuzzy search
+  const filteredContacts = searchQuery
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : contacts;
 
   return (
     <>
