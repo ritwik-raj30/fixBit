@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Fuse from "fuse.js"; // Import Fuse.js
 import Logo from "../assets/logo.svg";
+import Logout from "./Logout";
 
 export default function Contacts({ contacts, currentUser, setCurrentChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
@@ -82,28 +83,23 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
               );
             })}
           </div>
-          <div>
-            {/* <button className="complain" onClick={complainHandle}>
+          <div className="control-button">
+            <button className="complain" onClick={complainHandle}>
               {`${currentUser.isadmin ? `All ` : `Your`} complain`}
-            </button> */}
-            {!currentUser.isadmin && (
-              <button className="complain" onClick={complainHandle}>
-                Your complain
-              </button>
-            )}
-
+            </button>
             {!currentUser.isadmin && (
               <button className="Submit-complain" onClick={submitHandle}>
                 Submit complain
               </button>
             )}
-            <div className="current-user">
-              <div className="avatar">
-                <img src={currentUserImage} alt="avatar" />
-              </div>
-              <div className="username">
-                <h2>{currentUserName}</h2>
-              </div>
+            <Logout />
+          </div>
+          <div className="current-user">
+            <div className="avatar">
+              <img src={currentUserImage} alt="avatar" />
+            </div>
+            <div className="username">
+              <h2>{currentUserName}</h2>
             </div>
           </div>
         </Container>
@@ -114,10 +110,22 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 65% 15%;
+  grid-template-rows: 10% 10% 62% 6% 12%;
   overflow: hidden;
   background-color: #080420;
-
+  .control-button {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #9a86f3;
+      color: white;
+      cursor: pointer;
+    }
+  }
   .brand {
     display: flex;
     align-items: center;
