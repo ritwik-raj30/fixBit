@@ -62,7 +62,7 @@ const GetComplaint = () => {
 
   const updateComplaintStatus = async (id, status) => {
     try {
-      const response = await axios.post(updateComplaintStatusRoute, { id, status });
+      const response = await axios.put(updateComplaintStatusRoute, { id, status });
 
       if (response.data.status) {
         // Update the status of the complaint in the state
