@@ -1,4 +1,4 @@
-export const host = "http://localhost:5000";
+export const host = "https://fix-bit.onrender.com";
 
 //user routes
 export const loginRoute = `${host}/api/auth/login`;
@@ -21,4 +21,4 @@ export const createComplaintRoute = `${host}/api/complain/submit`;
 export const allgetComplaintRoute = `${host}/api/complain/all`;
 export const getComplaintsRoute = `${host}/api/complain`;
 export const deleteComplaintRoute = `${host}/api/complain/delete`;
-export const updateComplaintStatusRoute = `${host}/api/update/status`;  // Added route for updating complaint status
+export const updateComplaintStatusRoute = `${host}/api/update/status`; // Added route for updating complaint status
