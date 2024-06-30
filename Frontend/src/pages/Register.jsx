@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import styled from "styled-components";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 import { registerRoute } from "../utils/APIroutes";
+import { useEffect } from "react";
 
 const Register = () => {
   const navigate = useNavigate();
 
+  const [isadmin, setisadmin] = useState(false);
   const [values, setValues] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
-    gender: "", // Added gender field
+    gender: "",
+    role: "student",
+    secertkey: "",
   });
 
   const handleValidation = () => {
@@ -82,15 +86,16 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (handleValidation()) {
-      const { email, username, password, gender } = values;
+      const { email, username, password, gender, role, secertkey } = values;
       try {
         const { data } = await axios.post(registerRoute, {
           username,
           email,
           password,
           gender,
+          role,
+          secertkey,
         });
-
         if (data.status === false) {
           toast.error(data.msg, {
             position: "bottom-right",
@@ -103,6 +108,7 @@ const Register = () => {
           });
         }
         if (data.status === true) {
+          delete data.user.password;
           localStorage.setItem(
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
@@ -126,6 +132,9 @@ const Register = () => {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
+  useEffect(() => {
+    setisadmin(values.role === "admin");
+  }, [values.role]);
 
   return (
     <>
@@ -133,7 +142,7 @@ const Register = () => {
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h1>HostelBuddy</h1>
+            <h1>Fix_Bit</h1>
           </div>
           <input
             type="text"
@@ -159,11 +168,37 @@ const Register = () => {
             name="confirmPassword"
             onChange={(e) => handleChange(e)}
           />
-          <select name="gender" onChange={(e) => handleChange(e)} value={values.gender}>
-            <option value="" disabled>Select your gender</option>
+          {isadmin && (
+            <input
+              type="text"
+              placeholder="secertkey"
+              name="secertkey"
+              onChange={(e) => handleChange(e)}
+            />
+          )}
+          <select
+            name="gender"
+            onChange={(e) => handleChange(e)}
+            value={values.gender}
+          >
+            <option value="" disabled>
+              Select your gender
+            </option>
             <option value="male">Male</option>
             <option value="female">Female</option>
           </select>
+          <select
+            name="role"
+            onChange={(e) => handleChange(e)}
+            value={values.role}
+          >
+            <option value="" disabled>
+              Select your role
+            </option>
+            <option value="student">Student</option>
+            <option value="admin">admin</option>
+          </select>
+
           <button type="submit">Create User</button>
           <span>
             Already have an account? <Link to="/login">Login.</Link>
@@ -206,7 +241,7 @@ const FormContainer = styled.div`
     border-radius: 2rem;
     padding: 3rem 5rem;
   }
-select {
+  select {
     background-color: white;
     padding: 1rem;
     border: 0.1rem solid #4e0eff;
@@ -219,7 +254,7 @@ select {
       outline: none;
     }
   }
-      input {
+  input {
     background-color: transparent;
     padding: 1rem;
     border: 0.1rem solid #4e0eff;

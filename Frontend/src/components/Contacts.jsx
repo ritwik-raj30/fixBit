@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import Fuse from "fuse.js"; // Import Fuse.js
 import Logo from "../assets/logo.svg";
+import Logout from "./Logout";
 
 export default function Contacts({ contacts, currentUser, setCurrentChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (currentUser) {
@@ -24,9 +28,24 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
     setSearchQuery(event.target.value);
   };
 
-  const filteredContacts = contacts.filter((contact) =>
-    contact.username.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const complainHandle = () => {
+    navigate("/complains");
+  };
+
+  const submitHandle = () => {
+    navigate("/submit");
+  };
+
+  // Set up Fuse.js options
+  const fuse = new Fuse(contacts, {
+    keys: ["username"], // Specify the keys to search within
+    threshold: 0.3, // Set the threshold for matching (0.0 to 1.0)
+  });
+
+  // Perform fuzzy search
+  const filteredContacts = searchQuery
+    ? fuse.search(searchQuery).map((result) => result.item)
+    : contacts;
 
   return (
     <>
@@ -64,6 +83,17 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
               );
             })}
           </div>
+          <div className="control-button">
+            <button className="complain" onClick={complainHandle}>
+              {`${currentUser.isadmin ? `All ` : `Your`} complain`}
+            </button>
+            {!currentUser.isadmin && (
+              <button className="Submit-complain" onClick={submitHandle}>
+                Submit complain
+              </button>
+            )}
+            <Logout />
+          </div>
           <div className="current-user">
             <div className="avatar">
               <img src={currentUserImage} alt="avatar" />
@@ -80,10 +110,22 @@ export default function Contacts({ contacts, currentUser, setCurrentChat }) {
 
 const Container = styled.div`
   display: grid;
-  grid-template-rows: 10% 10% 65% 15%;
+  grid-template-rows: 10% 10% 62% 6% 12%;
   overflow: hidden;
   background-color: #080420;
-
+  .control-button {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #9a86f3;
+      color: white;
+      cursor: pointer;
+    }
+  }
   .brand {
     display: flex;
     align-items: center;
