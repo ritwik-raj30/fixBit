@@ -6,15 +6,19 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { createComplaintRoute } from "../utils/APIroutes";
 
-const cloudinaryUploadUrl = "https://api.cloudinary.com/v1_1/dqzavvk0u/image/upload";
+const cloudinaryUploadUrl =
+  "https://api.cloudinary.com/v1_1/dqzavvk0u/image/upload";
 const cloudinaryUploadPreset = "fixbit";
 
 const SubmitComplaint = () => {
   const navigate = useNavigate();
+  const data = JSON.parse(
+    localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
+  );
   const [values, setValues] = useState({
-    username: "",
+    username: data.username,
     rollNumber: "",
-    roomNumber: "",  // Added roomNumber to the form state
+    roomNumber: "", // Added roomNumber to the form state
     complaint: "",
     image: null,
   });
@@ -59,7 +63,10 @@ const SubmitComplaint = () => {
           formData.append("file", values.image);
           formData.append("upload_preset", cloudinaryUploadPreset);
 
-          const cloudinaryResponse = await axios.post(cloudinaryUploadUrl, formData);
+          const cloudinaryResponse = await axios.post(
+            cloudinaryUploadUrl,
+            formData
+          );
           imageUrl = cloudinaryResponse.data.secure_url;
         }
 
@@ -114,12 +121,12 @@ const SubmitComplaint = () => {
           <div className="brand">
             <h1>Submit Complaint</h1>
           </div>
-          <input
+          {/* <input
             type="text"
             placeholder="Username"
             name="username"
             onChange={(e) => handleChange(e)}
-          />
+          /> */}
           <input
             type="text"
             placeholder="Roll Number"
@@ -128,7 +135,7 @@ const SubmitComplaint = () => {
           />
           <input
             type="text"
-            placeholder="Room Number"  // Added input for room number
+            placeholder="Room Number" // Added input for room number
             name="roomNumber"
             onChange={(e) => handleChange(e)}
           />

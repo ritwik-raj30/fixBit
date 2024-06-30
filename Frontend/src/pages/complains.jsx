@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import { allgetComplaintRoute, getComplaintsRoute, updateComplaintStatusRoute } from "../utils/APIroutes";
+import {
+  allgetComplaintRoute,
+  getComplaintsRoute,
+  updateComplaintStatusRoute,
+} from "../utils/APIroutes";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
@@ -60,21 +64,24 @@ const GetComplaint = () => {
     }
   }, []);
 
-  const updateComplaintStatus = async (id, status) => {
+  const updateComplaintStatus = async (_id, status) => {
     try {
-      const response = await axios.put(updateComplaintStatusRoute, { id, status });
+      const response = await axios.put(updateComplaintStatusRoute, {
+        _id,
+        status,
+      });
 
       if (response.data.status) {
         // Update the status of the complaint in the state
-        setAllComplaints(prevState => 
-          prevState.map(complaint => 
-            complaint._id === id ? { ...complaint, status } : complaint
+        setAllComplaints((prevState) =>
+          prevState.map((complaint) =>
+            complaint._id === _id ? { ...complaint, status } : complaint
           )
         );
 
-        setComplaints(prevState => 
-          prevState.map(complaint => 
-            complaint._id === id ? { ...complaint, status } : complaint
+        setComplaints((prevState) =>
+          prevState.map((complaint) =>
+            complaint._id === _id ? { ...complaint, status } : complaint
           )
         );
 
@@ -104,25 +111,91 @@ const GetComplaint = () => {
   const handleNavigateToChat = () => {
     navigate("/chat");
   };
+  const gotouserchat = (username) => {
+    navigate("/chat");
+  };
 
   const Complaint = ({ complaint }) => {
     const handleMarkAsCompleted = () => {
       updateComplaintStatus(complaint._id, "completed");
     };
+    const deletecomplaint = async (_id) => {
+      try {
+        const response = await axios.delete(
+          `${getComplaintsRoute}/delete/${_id}`
+        );
+        if (response.data.status) {
+          toast.success(response.data.msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+          });
+          setComplaints((prevState) =>
+            prevState.filter((complaint) => complaint._id !== _id)
+          );
+          setAllComplaints((prevState) =>
+            prevState.filter((complaint) => complaint._id !== _id)
+          );
+        } else {
+          toast.error(response.data.msg, {
+            position: "bottom-right",
+            autoClose: 5000,
+          });
+        }
+      } catch (error) {
+        console.error("Error deleting complaint:", error);
+        toast.error("An error occurred. Please try again.", {
+          position: "bottom-right",
+          autoClose: 5000,
+        });
+      }
+    };
 
     return (
-      <div className={`complaint ${complaint.status === "completed" ? "completed" : ""}`} key={complaint._id}>
+      <div
+        className={`complaint ${
+          complaint.status === "completed" ? "completed" : ""
+        }`}
+        key={complaint._id}
+      >
         <div className="detail">
           <h2>{complaint.username}</h2>
           <p>Roll Number: {complaint.rollNumber}</p>
           <p>Room Number: {complaint.roomNumber}</p>
           <p>Issue: {complaint.complaint}</p>
-          <p className={`status ${complaint.status === "completed" ? "completed" : "pending"}`}>
+          <p
+            className={`status ${
+              complaint.status === "completed" ? "completed" : "pending"
+            }`}
+          >
             Status: {complaint.status}
           </p>
           {isadmin && complaint.status !== "completed" && (
             <button className="mark-completed" onClick={handleMarkAsCompleted}>
               Mark as Completed
+            </button>
+          )}
+          {isadmin && (
+            <button
+              className="go-back-to-chat"
+              onClick={() => gotouserchat(complaint.username)}
+            >
+              Chat with this User
+            </button>
+          )}
+          {isadmin && complaint.status === "completed" && (
+            <button
+              className="delete-it"
+              onClick={() => deletecomplaint(complaint._id)}
+            >
+              Delete this complain
+            </button>
+          )}
+          {!isadmin && (
+            <button
+              className="delete-it"
+              onClick={() => deletecomplaint(complaint._id)}
+            >
+              Delete this complain
             </button>
           )}
         </div>
@@ -136,19 +209,27 @@ const GetComplaint = () => {
   };
 
   const filteredComplaints = isadmin
-    ? allcomplaints.filter(complaint => statusFilter === "all" || complaint.status === statusFilter)
-    : complaints.filter(complaint => statusFilter === "all" || complaint.status === statusFilter);
+    ? allcomplaints.filter(
+        (complaint) =>
+          statusFilter === "all" || complaint.status === statusFilter
+      )
+    : complaints.filter(
+        (complaint) =>
+          statusFilter === "all" || complaint.status === statusFilter
+      );
 
   return (
     <ComplaintsContainer>
       <h1>All Complaints</h1>
       <div className="filter-buttons">
         <button onClick={() => handleStatusFilterChange("all")}>All</button>
-        <button onClick={() => handleStatusFilterChange("pending")}>Pending</button>
-        <button onClick={() => handleStatusFilterChange("completed")}>Completed</button>
-        {isadmin && (
-          <button onClick={handleNavigateToChat}>Go to Chat</button>
-        )}
+        <button onClick={() => handleStatusFilterChange("pending")}>
+          Pending
+        </button>
+        <button onClick={() => handleStatusFilterChange("completed")}>
+          Completed
+        </button>
+        <button onClick={handleNavigateToChat}>Go to Chat</button>
       </div>
       <div className="complaints-list">
         {filteredComplaints.map((complaint) => (
@@ -166,7 +247,6 @@ const ComplaintsContainer = styled.div`
   min-height: 100vh;
   color: black;
   overflow-y: auto;
-
   h1 {
     text-align: center;
     margin-bottom: 2rem;
@@ -222,8 +302,37 @@ const ComplaintsContainer = styled.div`
     }
 
     .mark-completed {
+      margin-left: 1rem;
       padding: 0.5rem 1rem;
       background-color: #9a86f3;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #7b68ee;
+      }
+    }
+    .go-back-to-chat {
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #9a86f3;
+      border: none;
+      border-radius: 0.5rem;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: #7b68ee;
+      }
+    }
+    .delete-it {
+      margin-left: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: red;
       border: none;
       border-radius: 0.5rem;
       color: white;
