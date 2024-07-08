@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 const mongoose = require("mongoose"); // Import mongoose
 module.exports.login = async (req, res, next) => {
   try {
@@ -133,3 +135,90 @@ module.exports.logOut = (req, res, next) => {
   }
 };
 
+const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, "1111", { expiresIn: '23h' });
+};
+
+module.exports.forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    console.log(email);
+
+    const foundUser = await User.findOne({ email });
+
+    if (!foundUser) {
+      return res.status(404).json({ message: "User with that email does not exist" });
+    }
+
+    const token = generateToken(foundUser._id);
+    console.log("generated");
+    console.log(token);
+
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      auth: {
+        user: "zen.jaiswal34@gmail.com",
+        pass: "ejbtxdljmgevlkmw",
+      }
+    });
+
+    const mailOptions = {
+      from: 'sam92@ethereal.email',
+      to: foundUser.email,
+      subject: 'Reset Password Link',
+      text: `Use the following link to reset your password: http://localhost:3000/reset-password/${foundUser._id}/${token}`
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.status(200).send('Message link sent to your email');
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+// const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcrypt');
+// const User = require('../models/userModel'); // Adjust the path as needed
+
+module.exports.resetPassword = async (req, res) => {
+  try {
+    const { userId, token } = req.params;
+    const { newPassword } = req.body;
+
+    // Debugging: Log received token before trimming
+    console.log('Raw received token:', token);
+
+    // Trim the token to remove any extraneous whitespace
+    const trimmedToken = token.trim();
+
+    // Debugging: Log the trimmed token
+    console.log('Trimmed token:', trimmedToken);
+
+    // Decode token without verification for debugging
+    const decodedWithoutVerification = jwt.decode(trimmedToken);
+    console.log('Decoded token without verification:', decodedWithoutVerification);
+
+    // Verify token
+    console.log('Attempting to decode token...');
+    const decoded = jwt.verify(trimmedToken, '1111');
+    console.log('Decoded token:', decoded);
+
+    if (decoded.id !== userId) {
+      return res.status(401).json({ message: 'Invalid token or user ID' });
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update user's password in the database
+    await User.findByIdAndUpdate(userId, { password: hashedPassword });
+
+    return res.status(200).json({ message: 'Password reset successfully' });
+  } catch (error) {
+    console.error('Error in resetPassword:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+};

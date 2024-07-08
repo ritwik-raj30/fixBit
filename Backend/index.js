@@ -27,6 +27,7 @@ app.use("/api/message", messageRoutes);
 app.use("/api/complain", complainRoutes);
 app.use("/api/update", updateRoutes);
 
+
 // Connect to MongoDB and start the server
 connectToMongoDB()
   .then(() => {
@@ -36,7 +37,7 @@ connectToMongoDB()
       // Initialize Socket.IO server here
       const io = socket(server, {
         cors: {
-          origin: "https://fix-bit.netlify.app",
+          origin: "http://localhost:3000",
           credentials: true,
         },
       });

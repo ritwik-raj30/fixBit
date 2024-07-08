@@ -91,7 +91,10 @@ const UserLogin = () => {
           />
           <button type="submit">Login User</button>
           <span>
-            Don't have an account? <Link to="/register">Register.</Link>
+            Do not have an account? <Link to="/register">Register</Link>.
+          </span>
+          <span>
+            Forgot your password? <Link to="/forgot-password">Reset it here</Link>.
           </span>
         </form>
       </FormContainer>

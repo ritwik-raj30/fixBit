@@ -11,17 +11,14 @@ import UserLogin from "./pages/UserLogin";
 import Home from './components/homepage/home';
 import About from './components/homepage/about';
 import Contact from './components/homepage/contactUs';
-
+import ForgotPassword from './pages/ForgotPassword'; // Add this import
+import ResetPassword from './pages/ResetPassword'; // Add this import
 
 function App() {
   return (
     <BrowserRouter>
-     
-     
-     <Routes>
+      <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} /> */}
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/user-login" element={<UserLogin />} />
         <Route path="/register" element={<Register />} />
@@ -30,9 +27,9 @@ function App() {
         <Route path="/submit" element={<SubmitComplaint />} />
         <Route path="/complains" element={<GetComplains />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} /> // Add this route
+        <Route path="/reset-password/:id/:token" element={<ResetPassword />} /> // Add this route
       </Routes>
-     
-      
     </BrowserRouter>
   );
 }

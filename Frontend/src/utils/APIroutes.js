@@ -1,4 +1,4 @@
-export const host = "https://fix-bit.onrender.com";
+export const host = "http://localhost:5500";
 
 //user routes
 export const loginRoute = `${host}/api/auth/login`;

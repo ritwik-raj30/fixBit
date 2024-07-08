@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import styled from "styled-components";
@@ -6,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { registerRoute } from "../utils/APIroutes";
-import { useEffect } from "react";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -24,6 +23,8 @@ const Register = () => {
 
   const handleValidation = () => {
     const { password, confirmPassword, username, email, gender } = values;
+    const emailRegex = /^btech\d{5}\.\d{2}@bitmesra\.ac\.in$/;
+
     if (password !== confirmPassword) {
       toast.error("Password and confirm password should be the same.", {
         position: "bottom-right",
@@ -59,6 +60,17 @@ const Register = () => {
       return false;
     } else if (email === "") {
       toast.error("Email is required.", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return false;
+    } else if (!emailRegex.test(email)) {
+      toast.error("Email format is incorrect. Use btech<rollno>.<year>@bitmesra.ac.in", {
         position: "bottom-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -246,7 +258,7 @@ const FormContainer = styled.div`
     padding: 1rem;
     border: 0.1rem solid #4e0eff;
     border-radius: 0.4rem;
-    color: Balack;
+    color: black;
     width: 100%;
     font-size: 1rem;
     &:focus {

@@ -59,6 +59,8 @@ exports.getComplaints = async (req, res) => {
       .json({ status: false, msg: "An error occurred. Please try again." });
   }
 };
+
+
 exports.deleteComplaint = async (req, res) => {
   try {
     const { id } = req.params;
@@ -72,3 +74,5 @@ exports.deleteComplaint = async (req, res) => {
       .json({ status: false, msg: "An error occurred. Please try again." });
   }
 };
+
+

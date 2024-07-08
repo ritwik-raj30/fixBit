@@ -4,11 +4,11 @@ import Logo from "../assets/logo.svg";
 import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios"; // Corrected import
+import axios from "axios";
 import { loginRoute } from "../utils/APIroutes";
 
 const Login = () => {
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const [isadmin, setisadmin] = useState(false);
   const [values, setValues] = useState({
@@ -20,7 +20,7 @@ const Login = () => {
 
   const handleValidation = () => {
     const { password, username, role, secertkey } = values;
-    if (password == "") {
+    if (password === "") {
       toast.error("Enter the complete password.", {
         position: "bottom-right",
         autoClose: 5000,
@@ -72,7 +72,6 @@ const Login = () => {
         });
 
         if (data.status === false) {
-          console.log("hehehehe");
           toast.error(data.msg, {
             position: "bottom-right",
             autoClose: 5000,
@@ -88,10 +87,8 @@ const Login = () => {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
           );
-          if(isadmin)
-          navigate("/admin");
-        else 
-        navigate("/chat"); // Navigate to the home page
+          if (isadmin) navigate("/admin");
+          else navigate("/chat");
         }
       } catch (error) {
         toast.error("An error occurred. Please try again.", {
@@ -110,6 +107,7 @@ const Login = () => {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
+  
   useEffect(() => {
     setisadmin(values.role === "admin");
   }, [values.role]);
@@ -151,12 +149,14 @@ const Login = () => {
               Select your role
             </option>
             <option value="student">Student</option>
-            <option value="admin">admin</option>
+            <option value="admin">Admin</option>
           </select>
 
           <button type="submit">Login User</button>
           <span>
-            DO not have an account? <Link to="/register">Register.</Link>
+       
+        
+            Forgot your password? <Link to="/forgot-password">Reset it here</Link>.
           </span>
         </form>
       </FormContainer>
@@ -201,7 +201,7 @@ const FormContainer = styled.div`
     padding: 1rem;
     border: 0.1rem solid #4e0eff;
     border-radius: 0.4rem;
-    color: Balack;
+    color: black;
     width: 100%;
     font-size: 1rem;
     &:focus {
