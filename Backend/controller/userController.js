@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose"); // Import mongoose
+const generateToken = require("../utils/generateTokens");
 module.exports.login = async (req, res, next) => {
   try {
     const { username, password, role, secertkey } = req.body;
@@ -17,6 +18,7 @@ module.exports.login = async (req, res, next) => {
     if (role === "admin" && secertkey !== process.env.ADMIN_KEY)
       return res.json({ msg: "Invalid Secert Key", status: false });
     delete user.password;
+    generateToken(user, res);
     return res.json({ status: true, user });
   } catch (error) {
     next(error);
@@ -48,6 +50,7 @@ module.exports.register = async (req, res, next) => {
       isadmin: role === "admin" ? true : false,
     });
     delete user.password;
+    generateToken(user, res);
     return res.json({ status: true, user });
   } catch (error) {
     next(error);
@@ -118,11 +121,11 @@ module.exports.setAvatar = async (req, res, next) => {
 module.exports.logOut = (req, res, next) => {
   try {
     const userId = req.params.id;
-    
+
     if (!userId) {
       return res.status(400).json({ msg: "User id is required" });
     }
-
+    res.clearCookie("token");
     // Perform logout operations (e.g., clear sessions, tokens, etc.)
     // Example: Clearing user session or token
 
@@ -132,4 +135,3 @@ module.exports.logOut = (req, res, next) => {
     next(error); // Pass any caught errors to Express error handling middleware
   }
 };
-

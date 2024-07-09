@@ -6,13 +6,14 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { loginRoute } from "../utils/APIroutes";
-
+import { useAuthContext } from "../context/authcontext.jsx";
 const UserLogin = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
     password: "",
   });
+  const { setAuthUser } = useAuthContext();
 
   const handleValidation = () => {
     const { password, username } = values;
@@ -37,11 +38,17 @@ const UserLogin = () => {
     if (handleValidation()) {
       const { username, password } = values;
       try {
-        const { data } = await axios.post(loginRoute, {
-          username,
-          password,
-          role: "student",
-        });
+        const { data } = await axios.post(
+          loginRoute,
+          {
+            username,
+            password,
+            role: "student",
+          },
+          {
+            withCredentials: true,
+          }
+        );
 
         if (data.status === false) {
           toast.error(data.msg, {
@@ -54,6 +61,7 @@ const UserLogin = () => {
             process.env.REACT_APP_LOCALHOST_KEY,
             JSON.stringify(data.user)
           );
+          setAuthUser(data.user);
           navigate("/chat");
         }
       } catch (error) {

@@ -1,201 +1,115 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { Element, scroller } from 'react-scroll';
-import backgroundImage from '../../assets/hero.png';
-import About from './about';
-import Contact from './contactUs';
-import GlobalStyle from './globalstyle ';
-import Navbar from './nav';
-
-const PageContainer = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  overflow-y: auto; /* Allow for vertical scrolling */
-`;
-
-const Container = styled.div`
-  width: 100%; /* Corrected typo here */
-  min-height: 100vh;
-  background: linear-gradient(rgba(8,0,58,0.7),rgba(8,0,58,0.7)), url('${backgroundImage}') no-repeat center center/cover;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1rem;
-`;
-
-const PurpleText = styled.span`
-  color: #5a67d8;
-`;
-
-const Title = styled.h1`
-  font-family: 'Montserrat', sans-serif;
-  font-size: 3rem;
-  margin-bottom: 1rem;
-`;
-
-const Button = styled.button`
-  background: #5a67d8;
-  color: #fff;
-  border: none;
-  padding: 1rem 2rem;
-  margin: 0.9rem;
-  font-size: 1.38rem;
-  cursor: pointer;
-  border-radius: 30px;
-
-  &:hover {
-    background: #434190;
-  }
-`;
-
-const Description = styled.div`
-  text-align: center;
-  margin: 2rem 0;
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.456);
-  border-radius: 10px;
-  max-width: 800px;
-
-  h2 {
-    font-size: 2rem;
-    font-family: 'Montserrat', sans-serif;
-    margin-bottom: 1rem;
-    color: #fff;
-  }
-
-  p {
-    font-size: 1.25rem;
-    font-family: 'Outfit', sans-serif;
-    color: #ddd;
-    line-height: 1.5;
-
-    span {
-      color: #5a67d8;
-    }
-  }
-`;
-
-const PointsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 2rem;
-
-  @media (max-width: 768px) {
-    flex-direction: column;
-    align-items: center;
-  }
-`;
-
-const Point = styled.div`
-  background: rgba(255, 255, 255, 0.9);
-  color: #333;
-  padding: 1rem 2rem;
-  border-radius: 10px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.15rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
-  cursor: pointer;
-
-  &:nth-child(even) {
-    background: rgba(255, 255, 255, 0.9);
-  }
-
-  &:hover {
-    background: #5a67d8;
-    color: #fff;
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-  }
-
-  @media (max-width: 768px) {
-    width: 80%;
-    margin-bottom: 1rem;
-  }
-`;
-
-const JoinUsContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 1rem;
-
-  .line1, .line2 {
-    font-size: 1.25rem;
-    font-family: 'Outfit', sans-serif;
-    color: #ddd;
-    margin: 0.5rem 0;
-  }
-`;
+import React from "react";
+import { Link } from "react-router-dom";
+import { Element, scroller } from "react-scroll";
+import backgroundImage from "../../assets/hero.png";
+import About from "./about";
+import Contact from "./contactUs";
+import GlobalStyle from "./globalstyle ";
+import Navbar from "./nav";
 
 const Home = () => {
   const scrollToAbout = () => {
-    scroller.scrollTo('about', {
+    scroller.scrollTo("about", {
       duration: 800,
       delay: 0,
-      smooth: 'easeInOutQuart'
+      smooth: "easeInOutQuart",
     });
   };
 
   const scrollToContact = () => {
-    scroller.scrollTo('contact', {
+    scroller.scrollTo("contact", {
       duration: 800,
       delay: 0,
-      smooth: 'easeInOutQuart'
+      smooth: "easeInOutQuart",
     });
   };
 
   return (
-    <div>
+    <div
+      className="flex flex-col min-h-screen overflow-y-auto"
+      style={{
+        backgroundImage: `linear-gradient(rgba(8,0,58,0.7),rgba(8,0,58,0.7)), url(${backgroundImage})`,
+      }}
+    >
       <GlobalStyle />
-     <Navbar />
-    <PageContainer>
-      <Container>
-        <Title>
-          Fix <PurpleText>BIT</PurpleText>
-        </Title>
-        <Description>
-          <h2>Made for BITIANS, by BITIANS !!</h2>
-          <p>
-            Say <strong><PurpleText>"Goodbye" </PurpleText></strong> to the hassle of unresolved complaints and unresponsive management. With our innovative chat app, you can easily report and track issues in real-time, ensuring your concerns are addressed swiftly and efficiently.
-          </p>
-          <PointsContainer>
-            <Point>Maintenance Requests</Point>
-            <Point>General Queries</Point>
-            <Point>Direct Personnel Connection</Point>
-            <Point>Comfortable & Stress-Free</Point>
-          </PointsContainer>
-          <JoinUsContainer>
-            <strong className='line1'>Join us in transforming the way you experience hostel living—</strong>
-            <strong className='line2'><PurpleText>because your comfort is our priority!</PurpleText></strong>
-          </JoinUsContainer>
-        </Description>
-        <div>
-          <Link to="/user-login">
-            <Button>Login User</Button>
-          </Link>
-          <Link to="/admin-login">
-            <Button>Login Admin</Button>
-          </Link>
-          {/* <Button onClick={scrollToAbout}>About Us</Button>
-          <Button onClick={scrollToContact}>Contact Us</Button> */}
+      <Navbar />
+      <div className="pt-20">
+        <div className=" flex flex-col items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-8 sm:top-10">
+          <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-white">
+            Fix <span className="text-purple-500">BIT</span>
+          </h1>
+          <div className="text-center bg-black bg-opacity-50 rounded-lg p-6 max-w-3xl">
+            <h2 className="text-2xl font-bold text-white mb-4">
+              Made for BITIANS, by BITIANS !!
+            </h2>
+            <p className="text-lg text-gray-300 mb-6">
+              Say <span className="text-purple-500 font-bold">"Goodbye"</span>{" "}
+              to the hassle of unresolved complaints and unresponsive
+              management. With our innovative chat app, you can easily report
+              and track issues in real-time, ensuring your concerns are
+              addressed swiftly and efficiently.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4 mb-6">
+              <div className="bg-white bg-opacity-90 text-gray-800 p-4 rounded-lg shadow-lg transition transform hover:bg-purple-500 hover:text-white hover:-translate-y-2">
+                Maintenance Requests
+              </div>
+              <div className="bg-white bg-opacity-90 text-gray-800 p-4 rounded-lg shadow-lg transition transform hover:bg-purple-500 hover:text-white hover:-translate-y-2">
+                General Queries
+              </div>
+              <div className="bg-white bg-opacity-90 text-gray-800 p-4 rounded-lg shadow-lg transition transform hover:bg-purple-500 hover:text-white hover:-translate-y-2">
+                Direct Personnel Connection
+              </div>
+              <div className="bg-white bg-opacity-90 text-gray-800 p-4 rounded-lg shadow-lg transition transform hover:bg-purple-500 hover:text-white hover:-translate-y-2">
+                Comfortable & Stress-Free
+              </div>
+            </div>
+            <div className="text-gray-300">
+              <p className="text-lg font-bold mb-1">
+                Join us in transforming the way you experience hostel living—
+              </p>
+              <p className="text-lg font-bold">
+                <span className="text-purple-500">
+                  because your comfort is our priority!
+                </span>
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <Link to="/user-login">
+              <button className="bg-[#5a67d8] text-white border-none py-4 px-8 m-2 text-[1.38rem] cursor-pointer rounded-full hover:bg-[#434190]">
+                Login User
+              </button>
+            </Link>
+            <Link to="/admin-login">
+              <button className="bg-[#5a67d8] text-white border-none py-4 px-8 m-2 text-[1.38rem] cursor-pointer rounded-full hover:bg-[#434190]">
+                Login Admin
+              </button>
+            </Link>
+            {/* <button
+            onClick={scrollToAbout}
+            className="px-6 py-2 text-white bg-purple-500 rounded hover:bg-purple-600"
+          >
+            About Us
+          </button>
+          <button
+            onClick={scrollToContact}
+            className="px-6 py-2 text-white bg-purple-500 rounded hover:bg-purple-600"
+          >
+            Contact Us
+          </button> */}
+          </div>
         </div>
-      </Container>
+      </div>
+      {/* <Element name="home">
+        <Home />
+      </Element>
       <Element name="about">
         <About />
       </Element>
       <Element name="contact">
         <Contact />
-      </Element>
-    </PageContainer>
+      </Element> */}
     </div>
-    
   );
 };
 

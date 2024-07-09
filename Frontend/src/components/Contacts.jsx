@@ -4,12 +4,12 @@ import styled from "styled-components";
 import Fuse from "fuse.js"; // Import Fuse.js
 import Logo from "../assets/logo.svg";
 import Logout from "./Logout";
-
+import { useAuthContext } from "../context/authcontext";
 export default function Contacts({ contacts, currentUser, setCurrentChat }) {
   const [currentUserName, setCurrentUserName] = useState(undefined);
   const [currentUserImage, setCurrentUserImage] = useState(undefined);
   const [currentSelected, setCurrentSelected] = useState(undefined);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { searchQuery, setSearchQuery } = useAuthContext();
   const navigate = useNavigate();
 
   useEffect(() => {

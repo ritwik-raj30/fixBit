@@ -88,14 +88,20 @@ const Register = () => {
     if (handleValidation()) {
       const { email, username, password, gender, role, secertkey } = values;
       try {
-        const { data } = await axios.post(registerRoute, {
-          username,
-          email,
-          password,
-          gender,
-          role,
-          secertkey,
-        });
+        const { data } = await axios.post(
+          registerRoute,
+          {
+            username,
+            email,
+            password,
+            gender,
+            role,
+            secertkey,
+          },
+          {
+            withCredentials: true,
+          }
+        );
         if (data.status === false) {
           toast.error(data.msg, {
             position: "bottom-right",
@@ -201,7 +207,7 @@ const Register = () => {
 
           <button type="submit">Create User</button>
           <span>
-            Already have an account? <Link to="/login">Login.</Link>
+            Already have an account? <Link to="/">Login.</Link>
           </span>
         </form>
       </FormContainer>

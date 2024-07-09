@@ -44,12 +44,18 @@ const AdminLogin = () => {
     if (handleValidation()) {
       const { username, password, secertkey } = values;
       try {
-        const { data } = await axios.post(loginRoute, {
-          username,
-          password,
-          role: "admin",
-          secertkey,
-        });
+        const { data } = await axios.post(
+          loginRoute,
+          {
+            username,
+            password,
+            role: "admin",
+            secertkey,
+          },
+          {
+            withCredentials: true,
+          }
+        );
 
         if (data.status === false) {
           toast.error(data.msg, {

@@ -9,6 +9,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/authcontext";
 
 const GetComplaint = () => {
   const [allcomplaints, setAllComplaints] = useState([]);
@@ -16,6 +17,7 @@ const GetComplaint = () => {
   const [isadmin, setIsAdmin] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const navigate = useNavigate();
+  const { setSearchQuery } = useAuthContext();
 
   useEffect(() => {
     const fetchAllComplaints = async () => {
@@ -112,6 +114,7 @@ const GetComplaint = () => {
     navigate("/chat");
   };
   const gotouserchat = (username) => {
+    setSearchQuery(username);
     navigate("/chat");
   };
 

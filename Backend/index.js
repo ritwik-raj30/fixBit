@@ -2,6 +2,9 @@
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const socket = require("socket.io");
+
 //file import
 const authRoutes = require("./routes/auth");
 const messageRoutes = require("./routes/message");
@@ -12,11 +15,15 @@ const connectToMongoDB = require("./db/dbConnect");
 require("dotenv").config();
 const PORT = process.env.PORT || 5500;
 const app = express();
-const socket = require("socket.io");
-
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
@@ -36,7 +43,8 @@ connectToMongoDB()
       // Initialize Socket.IO server here
       const io = socket(server, {
         cors: {
-          origin: "https://fix-bit.netlify.app",
+          // origin: "https://fix-bit.netlify.app",
+          origin: "http://localhost:3000",
           credentials: true,
         },
       });

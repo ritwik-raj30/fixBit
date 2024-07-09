@@ -4,14 +4,20 @@ import { Link } from "react-router-dom";
 
 function HomePage() {
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h1>Welcome to the Complaint Management System</h1>
-      <div style={{ marginTop: "20px" }}>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-3xl font-bold text-center mb-8">
+        Welcome to the Complaint Management System
+      </h1>
+      <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         <Link to="/user-login">
-          <button style={{ marginRight: "20px", padding: "10px 20px" }}>User</button>
+          <button className="px-6 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
+            User
+          </button>
         </Link>
         <Link to="/admin-login">
-          <button style={{ padding: "10px 20px" }}>Admin</button>
+          <button className="px-6 py-2 text-white bg-green-500 rounded hover:bg-green-600">
+            Admin
+          </button>
         </Link>
       </div>
     </div>

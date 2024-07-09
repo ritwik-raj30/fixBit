@@ -20,7 +20,7 @@ const Chat = () => {
 
   useEffect(() => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
-      navigate("/login");
+      navigate("/");
     } else {
       const data = JSON.parse(
         localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)
