@@ -11,6 +11,7 @@ const messageRoutes = require("./routes/message");
 const complainRoutes = require("./routes/submit");
 const updateRoutes = require("./routes/update");
 const connectToMongoDB = require("./db/dbConnect");
+const verifyToken = require("./utils/verifyToken");
 
 require("dotenv").config();
 const PORT = process.env.PORT || 5500;
@@ -30,6 +31,9 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/verify", verifyToken, (req, res) => {
+  res.json(req.user);
+});
 app.use("/api/message", messageRoutes);
 app.use("/api/complain", complainRoutes);
 app.use("/api/update", updateRoutes);

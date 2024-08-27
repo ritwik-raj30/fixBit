@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/logo.svg";
 import styled from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { loginRoute } from "../utils/APIroutes";
+import { loginRoute, verify } from "../utils/APIroutes";
 import { useAuthContext } from "../context/authcontext.jsx";
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -76,6 +76,20 @@ const UserLogin = () => {
   const handleChange = (event) => {
     setValues({ ...values, [event.target.name]: event.target.value });
   };
+  const verifyToken = async () => {
+    const data = await axios.get(verify, {
+      withCredentials: true,
+    });
+    console.log(data.data);
+
+    if (data.data.success) {
+      navigate("/chat");
+    }
+  };
+
+  useEffect(() => {
+    verifyToken();
+  }, []);
 
   return (
     <>
