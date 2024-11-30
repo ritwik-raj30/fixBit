@@ -13,6 +13,8 @@ import About from './components/homepage/about';
 import Contact from './components/homepage/contactUs';
 import ForgotPassword from './pages/ForgotPassword'; // Add this import
 import ResetPassword from './pages/ResetPassword'; // Add this import
+import Emailverify from "./pages/EmailVerify";
+import Validation from "./pages/Validation";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/user-login" element={<UserLogin />} />
+        <Route path="/email" element={<Emailverify/>}/>
+        <Route path="/verify-email/:token" element={<Validation/>} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/chat" element={<Chat />} />

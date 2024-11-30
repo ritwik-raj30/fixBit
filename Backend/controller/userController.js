@@ -183,6 +183,105 @@ module.exports.forgotPassword = async (req, res) => {
 // const bcrypt = require('bcrypt');
 // const User = require('../models/userModel'); // Adjust the path as needed
 
+
+module.exports.verifyEmail = async (req, res) => {
+  try {
+
+    const { email } = req.body;
+console.log("hellllo");
+console.log(email);
+    const foundUser = await User.findOne({ email });
+
+    if (foundUser) {
+      return res.status(400).json({ message: "Email already registered" });
+    }
+
+    const token = generateToken(email);
+    console.log("Verification token generated:", token);
+
+    const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 587,
+      auth: {
+        user: "zen.jaiswal34@gmail.com",
+        pass: "ejbtxdljmgevlkmw",
+      }
+    });
+
+    const mailOptions = {
+      from: 'sam92@ethereal.email',
+      to: email,
+      subject: 'Email Verification Link',
+      text: `Use the following link to verify your email and complete registration: http://localhost:3000/verify-email/${token}`
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    return res.status(200).send('Verification link sent to your email');
+  } catch (error) {
+    console.error("Error in verifyEmail:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+
+
+module.exports.decodeToken = async (req, res) => {
+  try {
+    const { token } = req.params; // Assuming the token is passed in the URL parameters
+
+    if (!token) {
+      return res.status(400).json({ message: 'No token provided' });
+    }
+
+    // Trim the token to remove any extraneous whitespace
+    const trimmedToken = token.trim();
+
+    // Decode token without verification
+    const decoded = jwt.decode(trimmedToken);
+
+    if (!decoded) {
+      throw new Error('Token could not be decoded');
+    }
+console.log("randin randi ")
+    // Verify token
+    const verifiedToken = jwt.verify(trimmedToken, '1111'); // Replace '1111' with your actual secret key
+  // Check if the token is valid
+  if (verifiedToken) {
+    return res.status(200).json({ success: true, data: { id: decoded.id } });
+  } else {
+    return res.status(401).json({ success: false, message: 'Invalid token' });
+  }
+} catch (error) {
+  console.error('Error during email verification:', error);
+  return res.status(401).json({ success: false, message: 'Invalid or expired token' });
+}
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports.resetPassword = async (req, res) => {
   try {
     const { userId, token } = req.params;
@@ -190,7 +289,7 @@ module.exports.resetPassword = async (req, res) => {
 
     // Debugging: Log received token before trimming
     console.log('Raw received token:', token);
-
+   
     // Trim the token to remove any extraneous whitespace
     const trimmedToken = token.trim();
 

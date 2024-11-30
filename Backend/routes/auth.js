@@ -6,7 +6,8 @@ const {
   logOut,
   getAlladmin,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  verifyEmail, decodeToken
 } = require("../controller/userController");
 
 const router = require("express").Router();
@@ -21,5 +22,9 @@ router.post("/forgot", forgotPassword);
 router.post("/reset-password/:userId/:token", resetPassword);
 
 router.get("/logout/:id", logOut);
+// Route to send email verification link
+router.post('/emailvalidate', verifyEmail);
 
+// Route to handle token verification and redirect to registration
+router.get('/verify-email/:token', decodeToken);
 module.exports = router;

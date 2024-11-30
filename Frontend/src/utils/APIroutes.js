@@ -8,6 +8,9 @@ export const allUsersRoute = `${host}/api/auth/allusers`;
 export const alladminRoute = `${host}/api/auth/alladmin`;
 export const setAvatarRoute = `${host}/api/auth/setavatar`;
 
+// Email verification routes
+export const verifyEmailRoute = `${host}/api/auth/emailvalidate`; // POST route to send verification email
+export const verifyEmailTokenRoute = `${host}/api/auth/verify-email/:token`; // GET route to verify token
 // message routes
 export const sendMessageRoute = `${host}/api/message/addmsg`;
 export const recieveMessageRoute = `${host}/api/message/getmsg`;
